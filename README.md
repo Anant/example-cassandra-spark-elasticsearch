@@ -16,6 +16,10 @@ Once a fat jar is built, it is submitted to spark (with spark-submit) with a dif
 - DSE Server (6.7.7)
 - Apache Spark, SparkSQL (2.2.3)
 
+## Requirements
+- docker, docker-compose
+- sbt
+
 ## Table of Contents
 1. [Run containers with docker-compose](#1-run-docker-containers)
 2. [Setup Cassandra Table](#2-setup-cassandra-table)
@@ -37,6 +41,10 @@ docker ps -a
 Use the following command to setup the test Cassandra table: 
 ```bash
 docker-compose exec dse1 cqlsh -f /app/test-data/keyspace.cql
+```
+Additionally, the fat jar needs to be built. Execute the following command in the root directory of the project: 
+```bash
+sbt assembly
 ```
 
 ## 3. Run First Job
