@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  dse1:
+    image: datastax/dse-server:6.7.7
+    command: [-k]
+    environment:
+      DS_LICENSE: accept
+    ports:
+      - 7077:7077
+      - 9042:9042
+      - 4040:4040
+      - 8080:8080
+    cap_add:
+      - IPC_LOCK
+    ulimits:
+      memlock: -1
+    volumes:
+      - ./data/spark-master:/tmp/data
+      - ./target/scala-2.11:/jars
+      - ./:/app
+    networks:
+      - cassandra-spark-es-network
+  es1: 
+    image: elasticsearch:7.13.0
+    container_name: es1
+    environment: 
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits: 
+      memlock: 
+        soft: -1
+        hard: -1
+    volumes: 
+      - es_data1:/usr/share/elasticsearch/data
+    ports: 
+      - 9200:9200
+      - 9300:9300
+    networks: 
+      - cassandra-spark-es-network
+
+networks:
+  cassandra-spark-es-network:
+
+
+volumes: 
+  es_data1: 
+    driver: local 
